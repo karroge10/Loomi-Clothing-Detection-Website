@@ -1,7 +1,11 @@
 {
   "name": "loomi-clothing-analyzer",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "AI-powered clothing analyzer with background removal",
+  "keywords": ["react", "vite", "ai", "clothing", "image-analysis"],
+  "author": "Your Name",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
