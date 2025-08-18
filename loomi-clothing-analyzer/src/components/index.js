@@ -1,0 +1,8 @@
+// Component exports
+export { default as Header } from './Header'
+export { default as Hero } from './Hero'
+export { default as UploadSection } from './UploadSection'
+export { default as LoadingSpinner } from './LoadingSpinner'
+export { default as Results } from './Results'
+export { default as ClothingSelectionModal } from './ClothingSelectionModal'
+export { default as CustomZoneSelector } from './CustomZoneSelector'
