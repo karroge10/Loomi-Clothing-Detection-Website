@@ -1,72 +1,72 @@
 # Loomi Clothing Analyzer
 
-Современное React приложение для анализа одежды с использованием AI API. Приложение позволяет загружать изображения, автоматически определять элементы одежды, удалять фон и анализировать цвет и категорию.
+Modern React application for clothing analysis using AI API. The app allows you to upload images, automatically detect clothing items, remove backgrounds, and analyze color and category.
 
-## 🚀 Возможности
+## 🚀 Features
 
-- **Загрузка изображений** с поддержкой drag & drop
-- **Автоматическое определение** элементов одежды
-- **Выбор элемента** из нескольких обнаруженных
-- **Удаление фона** с помощью AI
-- **Анализ цвета** и категории одежды
-- **Кастомная зона** для ручного выделения области
-- **Адаптивный дизайн** для всех устройств
+- **Image upload** with drag & drop support
+- **Automatic detection** of clothing items
+- **Item selection** from multiple detected items
+- **Background removal** using AI
+- **Color analysis** and clothing category
+- **Custom zone** for manual area selection
+- **Responsive design** for all devices
 
-## 🛠️ Технологии
+## 🛠️ Technologies
 
-- **React 18** с современными хуками
-- **Vite** для быстрой сборки
-- **CSS3** с современными возможностями
-- **Canvas API** для интерактивного выделения зон
+- **React 18** with modern hooks
+- **Vite** for fast building
+- **CSS3** with modern capabilities
+- **Canvas API** for interactive zone selection
 
-## 📦 Установка
+## 📦 Installation
 
-1. Клонируйте репозиторий:
+1. Clone the repository:
 ```bash
 git clone <your-repo-url>
 cd loomi-clothing-analyzer
 ```
 
-2. Установите зависимости:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Создайте файл `.env` на основе `.env.example`:
+3. Create `.env` file based on `.env.example`:
 ```bash
 cp .env.example .env
 ```
 
-4. Настройте API URL в файле `.env`:
+4. Configure API URL in `.env` file:
 ```env
 VITE_API_BASE_URL=https://your-huggingface-api-url.com
 ```
 
-## 🚀 Запуск
+## 🚀 Running
 
-### Разработка
+### Development
 ```bash
 npm run dev
 ```
 
-### Сборка для продакшена
+### Production build
 ```bash
 npm run build
 ```
 
-### Предварительный просмотр сборки
+### Preview build
 ```bash
 npm run preview
 ```
 
-## 🔧 Настройка API
+## 🔧 API Configuration
 
-Приложение ожидает следующие API endpoints:
+The application expects the following API endpoints:
 
-### 1. Определение одежды (`/clothing`)
-**POST** запрос с изображением для определения элементов одежды.
+### 1. Clothing Detection (`/clothing`)
+**POST** request with image for clothing item detection.
 
-**Ответ:**
+**Response:**
 ```json
 {
   "clothing_types": {
@@ -90,10 +90,10 @@ npm run preview
 }
 ```
 
-### 2. Анализ изображения (`/analyze`)
-**POST** запрос для полного анализа выбранного элемента.
+### 2. Image Analysis (`/analyze`)
+**POST** request for full analysis of selected item.
 
-**Ответ:**
+**Response:**
 ```json
 {
   "clothing_only_image": "data:image/jpeg;base64,...",
@@ -111,52 +111,52 @@ npm run preview
 }
 ```
 
-## 📱 Использование
+## 📱 Usage
 
-1. **Загрузка изображения**: Перетащите изображение или нажмите для выбора файла
-2. **Автоматическое определение**: Система автоматически найдет элементы одежды
-3. **Выбор элемента**: Если найдено несколько элементов, выберите нужный
-4. **Просмотр результатов**: Получите изображение без фона и анализ
-5. **Кастомная зона**: При необходимости выделите зону вручную
+1. **Image upload**: Drag and drop an image or click to select a file
+2. **Automatic detection**: The system automatically finds clothing items
+3. **Item selection**: If multiple items are found, select the desired one
+4. **View results**: Get the image without background and analysis
+5. **Custom zone**: Manually select an area if needed
 
-## 🎨 Кастомизация
+## 🎨 Customization
 
-### Цвета и темы
-Основные цвета определены в CSS переменных:
-- Primary: `#22c55e` (зеленый)
-- Background: `#0a0a0a` (темный)
-- Text: `#ffffff` (белый)
-- Secondary: `#9ca3af` (серый)
+### Colors and themes
+Main colors are defined in CSS variables:
+- Primary: `#22c55e` (green)
+- Background: `#0a0a0a` (dark)
+- Text: `#ffffff` (white)
+- Secondary: `#9ca3af` (gray)
 
-### Стили
-Все компоненты имеют модульные CSS файлы для легкой кастомизации.
+### Styles
+All components have modular CSS files for easy customization.
 
-## 📱 Адаптивность
+## 📱 Responsiveness
 
-Приложение полностью адаптивно и поддерживает:
+The application is fully responsive and supports:
 - Desktop (1200px+)
 - Tablet (768px - 1199px)
-- Mobile (до 767px)
+- Mobile (up to 767px)
 
-## 🐛 Отладка
+## 🐛 Debugging
 
-Для отладки API запросов:
-1. Откройте DevTools (F12)
-2. Перейдите на вкладку Network
-3. Загрузите изображение и просмотрите запросы
+For debugging API requests:
+1. Open DevTools (F12)
+2. Go to Network tab
+3. Upload an image and view requests
 
-## 📄 Лицензия
+## 📄 License
 
 MIT License
 
-## 🤝 Вклад в проект
+## 🤝 Contributing
 
-1. Fork репозитория
-2. Создайте feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit изменения (`git commit -m 'Add amazing feature'`)
-4. Push в branch (`git push origin feature/amazing-feature`)
-5. Откройте Pull Request
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📞 Поддержка
+## 📞 Support
 
-Если у вас есть вопросы или проблемы, создайте issue в репозитории.
+If you have questions or issues, create an issue in the repository.
