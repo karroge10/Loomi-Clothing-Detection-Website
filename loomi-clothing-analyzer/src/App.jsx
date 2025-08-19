@@ -7,14 +7,11 @@ import LoadingSpinner from './components/LoadingSpinner'
 import Results from './components/Results'
 import ClothingSelectionModal from './components/ClothingSelectionModal'
 import CustomZoneSelector from './components/CustomZoneSelector'
-import { apiPostFormData } from './config/api'
+import { buildApiUrl } from './config/api'
 
 function App() {
   // Log environment variables for debugging
-  console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL || import.meta.env.API_BASE_URL)
-  console.log('API Key available (VITE):', !!import.meta.env.VITE_API_KEY)
-  console.log('API Key available (production):', !!import.meta.env.API_KEY)
-  console.log('API Key available (any):', !!(import.meta.env.VITE_API_KEY || import.meta.env.API_KEY))
+  console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL)
   
   const [currentFile, setCurrentFile] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -52,9 +49,19 @@ function App() {
       const formData = new FormData()
       formData.append('file', file)
 
-      console.log('Sending clothing detection request...')
+      const apiUrl = buildApiUrl('/clothing')
+      console.log('Sending request to:', apiUrl)
       
-      const data = await apiPostFormData('/clothing', formData)
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
       setClothingData(data)
 
       // Transform API response to match our expected format
@@ -109,9 +116,19 @@ function App() {
         formData.append('selected_clothing', clothingType)
       }
 
-      console.log('Sending analysis request...')
+      const apiUrl = buildApiUrl('/analyze')
+      console.log('Sending request to:', apiUrl)
       
-      const data = await apiPostFormData('/analyze', formData)
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
       
       // Transform analysis results to match our expected format
       const analysisResults = {

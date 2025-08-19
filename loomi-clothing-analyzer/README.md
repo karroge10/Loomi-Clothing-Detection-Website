@@ -32,20 +32,15 @@ cd loomi-clothing-analyzer
 npm install
 ```
 
-3. Create `.env.local` file with your API credentials:
+3. Create `.env` file based on `.env.example`:
 ```bash
-# Create .env.local file in the project root
+cp .env.example .env
 ```
 
-4. Configure API settings in `.env.local` file:
+4. Configure API URL in `.env` file:
 ```env
-VITE_API_BASE_URL=https://your-space.hf.space
-VITE_API_KEY=your-super-secret-key-here
+VITE_API_BASE_URL=https://your-huggingface-api-url.com
 ```
-
-**Important:** Replace the placeholder values with your actual Hugging Face API credentials. The `VITE_` prefix is required for Vite to expose these variables to the client.
-
-**For Vercel deployment:** Use `API_KEY` and `API_BASE_URL` (without `VITE_` prefix) in your Vercel environment variables.
 
 ## 🚀 Running
 
@@ -66,15 +61,6 @@ npm run preview
 
 ## 🔧 API Configuration
 
-### Authentication
-All API requests require authentication using a Bearer token. The token should be configured in your `.env.local` file as `VITE_API_KEY`.
-
-**Headers:**
-```
-Authorization: Bearer your-super-secret-key-here
-```
-
-### Endpoints
 The application expects the following API endpoints:
 
 ### 1. Clothing Detection (`/clothing`)
@@ -156,13 +142,8 @@ The application is fully responsive and supports:
 
 For debugging API requests:
 1. Open DevTools (F12)
-2. Go to Console tab to check if API key is loaded
-3. Go to Network tab to view requests and headers
-4. Verify that `Authorization` header is present in requests
-
-**Console logs:**
-- `API Base URL:` - Shows the configured API base URL
-- `API Key available:` - Shows whether the API key is loaded (true/false)
+2. Go to Network tab
+3. Upload an image and view requests
 
 ## 📄 License
 
