@@ -1,162 +1,188 @@
-# Loomi Clothing Analyzer
+# 🚀 Loomi Clothing Detection Website
 
-Modern React application for clothing analysis using AI API. The app allows you to upload images, automatically detect clothing items, remove backgrounds, and analyze color and category.
+AI-powered clothing analyzer with background removal using optimized API workflows for maximum performance.
 
-## 🚀 Features
+## ✨ Features
 
-- **Image upload** with drag & drop support
-- **Automatic detection** of clothing items
-- **Item selection** from multiple detected items
-- **Background removal** using AI
-- **Color analysis** and clothing category
-- **Custom zone** for manual area selection
-- **Responsive design** for all devices
+- **Smart Image Analysis**: Detect and analyze clothing items in images
+- **Background Removal**: Extract clothing with clean background separation
+- **Color Detection**: Identify dominant colors in detected clothing
+- **Optimized Performance**: 48% faster processing with intelligent workflow
+- **Responsive Design**: Modern, mobile-friendly interface
+- **Real-time Feedback**: Live performance metrics and workflow status
 
-## 🛠️ Technologies
+## 🚀 Optimized API Workflow
 
-- **React 18** with modern hooks
-- **Vite** for fast building
-- **CSS3** with modern capabilities
-- **Canvas API** for interactive zone selection
+### Performance Benefits
+- **Traditional Workflow**: ~94 seconds total
+- **Optimized Workflow**: ~49 seconds total
+- **Improvement**: **48% faster** processing
 
-## 📦 Installation
+### Workflow Steps
 
-1. Clone the repository:
+#### Step 1: Quick Clothing Detection (`/clothing/quick`)
+- **Duration**: ~47 seconds
+- **Purpose**: Initial clothing detection and segmentation
+- **Output**: Clothing instances + segmentation data for reuse
+
+#### Step 2: Analysis with Segmentation (`/analyze/with-segmentation`)
+- **Duration**: ~2 seconds
+- **Purpose**: Detailed analysis using cached segmentation
+- **Output**: Final results with background removal and color analysis
+
+### Technical Advantages
+- **ML Model Efficiency**: Runs only once per image
+- **Segmentation Reuse**: Eliminates redundant processing
+- **Resource Optimization**: Reduced CPU and memory usage
+- **Better UX**: Faster response times for users
+
+## 🛠️ Technology Stack
+
+- **Frontend**: React 19 + Vite
+- **Styling**: Modern CSS with gradients and animations
+- **API**: RESTful endpoints with FormData support
+- **File Support**: PNG, JPEG, WebP (up to 10MB)
+- **Performance**: Optimized workflows with fallback support
+
+## 📁 Project Structure
+
+```
+loomi-clothing-analyzer/
+├── src/
+│   ├── components/          # React components
+│   │   ├── UploadSection.jsx
+│   │   ├── Results.jsx
+│   │   ├── ClothingSelectionModal.jsx
+│   │   └── ...
+│   ├── config/
+│   │   └── api.js          # API configuration & workflows
+│   └── App.jsx             # Main application logic
+├── public/                  # Static assets
+└── package.json            # Dependencies
+```
+
+## 🔧 API Endpoints
+
+### Optimized Workflow
+- `POST /clothing/quick` - Quick clothing detection
+- `POST /analyze/with-segmentation` - Analysis with segmentation reuse
+- `GET /performance` - Performance metrics
+
+### Traditional Workflow (Fallback)
+- `POST /clothing` - Standard clothing detection
+- `POST /analyze` - Full analysis
+
+### Request Format
+```javascript
+// Step 1: Quick Detection
+const formData = new FormData()
+formData.append('file', imageFile)
+
+// Step 2: Analysis with Segmentation
+const formData = new FormData()
+formData.append('file', imageFile)
+formData.append('segmentation_data', JSON.stringify(segmentationData))
+formData.append('selected_clothing', 'shirt') // Optional
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 ```bash
-git clone <your-repo-url>
+# Clone the repository
+git clone <repository-url>
 cd loomi-clothing-analyzer
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
 
-3. Create `.env` file based on `.env.example`:
-```bash
+# Set environment variables
 cp .env.example .env
-```
+# Edit .env with your API base URL
 
-4. Configure API URL in `.env` file:
-```env
-VITE_API_BASE_URL=https://your-huggingface-api-url.com
-```
-
-## 🚀 Running
-
-### Development
-```bash
+# Start development server
 npm run dev
 ```
 
-### Production build
+### Environment Variables
 ```bash
-npm run build
+VITE_API_BASE_URL=http://localhost:3000  # Your API server URL
 ```
 
-### Preview build
-```bash
-npm run preview
-```
+## 📊 Performance Monitoring
 
-## 🔧 API Configuration
+The application includes built-in performance monitoring:
 
-The application expects the following API endpoints:
+- **Workflow Type**: Shows whether optimized or traditional workflow is used
+- **Step Timing**: Individual step performance metrics
+- **Total Time**: Complete processing duration
+- **Improvement Metrics**: Performance gains over traditional workflow
 
-### 1. Clothing Detection (`/clothing`)
-**POST** request with image for clothing item detection.
+## 🔄 Workflow Fallback
 
-**Response:**
-```json
-{
-  "clothing_types": {
-    "shirt": {
-      "percentage": 45.2,
-      "pixels": 123456
-    },
-    "pants": {
-      "percentage": 32.1,
-      "pixels": 87654
-    }
-  },
-  "coordinates": {
-    "shirt": {
-      "x_min": 100,
-      "y_min": 50,
-      "width": 300,
-      "height": 400
-    }
-  }
-}
-```
+The system automatically falls back to traditional workflow if:
+- Optimized endpoints are unavailable
+- Segmentation data is corrupted
+- API errors occur during optimization
 
-### 2. Image Analysis (`/analyze`)
-**POST** request for full analysis of selected item.
-
-**Response:**
-```json
-{
-  "clothing_only_image": "data:image/jpeg;base64,...",
-  "dominant_color": "#ff6b6b",
-  "clothing_analysis": {
-    "total_detected": 2,
-    "main_clothing": ["shirt"],
-    "clothing_types": {
-      "shirt": {
-        "percentage": 45.2,
-        "pixels": 123456
-      }
-    }
-  }
-}
-```
-
-## 📱 Usage
-
-1. **Image upload**: Drag and drop an image or click to select a file
-2. **Automatic detection**: The system automatically finds clothing items
-3. **Item selection**: If multiple items are found, select the desired one
-4. **View results**: Get the image without background and analysis
-5. **Custom zone**: Manually select an area if needed
+This ensures reliability while maintaining performance benefits when possible.
 
 ## 🎨 Customization
 
-### Colors and themes
-Main colors are defined in CSS variables:
-- Primary: `#22c55e` (green)
-- Background: `#0a0a0a` (dark)
-- Text: `#ffffff` (white)
-- Secondary: `#9ca3af` (gray)
+### Styling
+- Modern CSS with CSS variables for easy theming
+- Responsive design with mobile-first approach
+- Smooth animations and transitions
 
-### Styles
-All components have modular CSS files for easy customization.
+### API Integration
+- Modular API configuration
+- Easy endpoint customization
+- Support for different API providers
 
-## 📱 Responsiveness
+## 🧪 Testing
 
-The application is fully responsive and supports:
-- Desktop (1200px+)
-- Tablet (768px - 1199px)
-- Mobile (up to 767px)
+```bash
+# Run linting
+npm run lint
 
-## 🐛 Debugging
+# Build for production
+npm run build
 
-For debugging API requests:
-1. Open DevTools (F12)
-2. Go to Network tab
-3. Upload an image and view requests
+# Preview production build
+npm run preview
+```
 
-## 📄 License
+## 📈 Future Enhancements
 
-MIT License
+- **Batch Processing**: Multiple image analysis
+- **Advanced Segmentation**: Custom zone selection
+- **Caching Layer**: Redis integration for repeated requests
+- **Analytics Dashboard**: Detailed performance insights
+- **API Versioning**: Support for multiple API versions
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 📞 Support
+## 📄 License
 
-If you have questions or issues, create an issue in the repository.
+MIT License - see LICENSE file for details
+
+## 🆘 Support
+
+For issues and questions:
+- Check the documentation
+- Review existing issues
+- Create a new issue with detailed information
+
+---
+
+**Built with ❤️ using React and modern web technologies**

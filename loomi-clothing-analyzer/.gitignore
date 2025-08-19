@@ -94,3 +94,6 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+
+# Style guides and documentation
+LOOMI_STYLE_GUIDE.md

@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { Target } from 'lucide-react'
 import './CustomZoneSelector.css'
 
 const CustomZoneSelector = ({ image, onBack, onAnalyze }) => {
@@ -123,7 +124,10 @@ const CustomZoneSelector = ({ image, onBack, onAnalyze }) => {
   return (
     <div className="custom-zone-selector">
       <div className="selector-header">
-        <h2>🎯 Custom Zone Selection</h2>
+        <h2>
+          <Target size={24} />
+          Custom Zone Selection
+        </h2>
         <p>Draw a rectangle around the area you want to analyze</p>
       </div>
       

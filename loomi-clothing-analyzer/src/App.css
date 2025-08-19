@@ -22,16 +22,98 @@ body {
 }
 
 .app {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #ffffff;
   min-height: 100vh;
-  width: 100%;
-  min-width: 100%;
-  display: block;
+  background: #0a0a0a; /* Consistent dark background */
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
-  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
-  display: block;
+  padding: 0 2rem;
+}
+
+/* Analyzer Section */
+.analyzer-section {
+  padding-top: 6rem; /* Account for fixed header */
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Performance Indicators */
+.performance-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  margin: 0.5rem;
+}
+
+.performance-indicator.optimized {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.performance-indicator.traditional {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+/* Loading States with Workflow Info */
+.loading-with-workflow {
+  position: relative;
+}
+
+.loading-with-workflow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.2), transparent);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Features Section */
+.features {
+  background: #0a0a0a;
+}
+
+/* About Section */
+.about {
+  background: #0a0a0a;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .analyzer-section {
+    padding-top: 8rem; /* More space for mobile header */
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .analyzer-section {
+    padding-top: 7rem;
+  }
 }

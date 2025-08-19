@@ -3,7 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "description": "AI-powered clothing analyzer with background removal",
-  "keywords": ["react", "vite", "ai", "clothing", "image-analysis"],
+  "keywords": [
+    "react",
+    "vite",
+    "ai",
+    "clothing",
+    "image-analysis"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "type": "module",
@@ -15,6 +21,8 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.2.1",
+    "lucide-react": "^0.540.0",
+    "pako": "^2.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "vite": "^4.5.2"
