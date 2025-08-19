@@ -1,10 +1,11 @@
 // API Configuration
 export const API_CONFIG = {
   // Base URL for your Hugging Face API
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || import.meta.env.API_BASE_URL || 'http://localhost:3000',
   
   // API Key for Hugging Face authentication
-  API_KEY: import.meta.env.VITE_API_KEY,
+  // Support both VITE_API_KEY (local development) and API_KEY (production)
+  API_KEY: import.meta.env.VITE_API_KEY || import.meta.env.API_KEY,
   
   // Endpoints - adjust these based on your actual API endpoints
   ENDPOINTS: {

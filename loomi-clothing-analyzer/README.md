@@ -45,6 +45,8 @@ VITE_API_KEY=your-super-secret-key-here
 
 **Important:** Replace the placeholder values with your actual Hugging Face API credentials. The `VITE_` prefix is required for Vite to expose these variables to the client.
 
+**For Vercel deployment:** Use `API_KEY` and `API_BASE_URL` (without `VITE_` prefix) in your Vercel environment variables.
+
 ## 🚀 Running
 
 ### Development

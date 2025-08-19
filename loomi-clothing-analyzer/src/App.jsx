@@ -11,8 +11,10 @@ import { apiPostFormData } from './config/api'
 
 function App() {
   // Log environment variables for debugging
-  console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL)
-  console.log('API Key available:', !!import.meta.env.VITE_API_KEY)
+  console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL || import.meta.env.API_BASE_URL)
+  console.log('API Key available (VITE):', !!import.meta.env.VITE_API_KEY)
+  console.log('API Key available (production):', !!import.meta.env.API_KEY)
+  console.log('API Key available (any):', !!(import.meta.env.VITE_API_KEY || import.meta.env.API_KEY))
   
   const [currentFile, setCurrentFile] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
