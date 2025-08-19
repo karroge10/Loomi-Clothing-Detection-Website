@@ -7,11 +7,12 @@ import LoadingSpinner from './components/LoadingSpinner'
 import Results from './components/Results'
 import ClothingSelectionModal from './components/ClothingSelectionModal'
 import CustomZoneSelector from './components/CustomZoneSelector'
-import { buildApiUrl } from './config/api'
+import { apiPostFormData } from './config/api'
 
 function App() {
   // Log environment variables for debugging
   console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL)
+  console.log('API Key available:', !!import.meta.env.VITE_API_KEY)
   
   const [currentFile, setCurrentFile] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -49,19 +50,9 @@ function App() {
       const formData = new FormData()
       formData.append('file', file)
 
-      const apiUrl = buildApiUrl('/clothing')
-      console.log('Sending request to:', apiUrl)
+      console.log('Sending clothing detection request...')
       
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: formData
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
+      const data = await apiPostFormData('/clothing', formData)
       setClothingData(data)
 
       // Transform API response to match our expected format
@@ -116,19 +107,9 @@ function App() {
         formData.append('selected_clothing', clothingType)
       }
 
-      const apiUrl = buildApiUrl('/analyze')
-      console.log('Sending request to:', apiUrl)
+      console.log('Sending analysis request...')
       
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: formData
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
+      const data = await apiPostFormData('/analyze', formData)
       
       // Transform analysis results to match our expected format
       const analysisResults = {
