@@ -110,7 +110,7 @@ npm run dev
 
 ### Environment Variables
 ```bash
-VITE_API_BASE_URL=http://localhost:3000  # Your API server URL
+VITE_API_BASE_URL=http://localhost:3001  # Your API server URL
 ```
 
 ## 📊 Performance Monitoring

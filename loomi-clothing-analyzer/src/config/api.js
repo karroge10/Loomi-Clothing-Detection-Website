@@ -1,4 +1,3 @@
-import { useState, useCallback } from 'react'
 import pako from 'pako'
 
 // API Configuration for Loomi Clothing Detection API
@@ -53,107 +52,6 @@ export const API_CONFIG = {
   }
 }
 
-// Helper function to build full API URL
-export const buildApiUrl = (endpoint) => {
-  return `${API_CONFIG.BASE_URL}${endpoint}`
-}
-
-// Helper function to handle API errors with rate limiting support
-export const handleApiError = (error, response = null) => {
-  if (response) {
-    const status = response.status
-    
-    // Handle rate limiting
-    if (status === 429) {
-      const retryAfter = response.headers.get('Retry-After')
-      const rateLimitRemaining = response.headers.get('X-RateLimit-Remaining')
-      const rateLimitReset = response.headers.get('X-RateLimit-Reset')
-      
-      if (rateLimitRemaining === '0') {
-        return {
-          type: 'RATE_LIMIT_EXCEEDED',
-          message: 'Rate limit exceeded. Maximum 15 requests per 60 seconds.',
-          retryAfter: retryAfter ? parseInt(retryAfter) : 60,
-          resetTime: rateLimitReset
-        }
-      } else {
-        return {
-          type: 'CONCURRENT_LIMIT_EXCEEDED',
-          message: 'Concurrent request limit exceeded. Maximum 5 concurrent requests.',
-          retryAfter: 5
-        }
-      }
-    }
-    
-    // Handle validation errors
-    if (status === 400) {
-      return {
-        type: 'VALIDATION_ERROR',
-        message: 'Invalid request. Please check your image file.',
-        details: error.message
-      }
-    }
-    
-    // Handle server errors
-    if (status >= 500) {
-      return {
-        type: 'SERVER_ERROR',
-        message: 'Server error. Please try again later.',
-        details: error.message
-      }
-    }
-    
-    return {
-      type: 'HTTP_ERROR',
-      message: `HTTP error! status: ${status}`,
-      details: error.message
-    }
-  }
-  
-  // Network or other errors
-  if (error.name === 'TypeError' && error.message.includes('fetch')) {
-    return {
-      type: 'NETWORK_ERROR',
-      message: 'Network error. Please check your connection.',
-      details: error.message
-    }
-  }
-  
-  return {
-    type: 'UNKNOWN_ERROR',
-    message: error.message || 'An unknown error occurred',
-    details: error.toString()
-  }
-}
-
-// Helper function to make API requests with enhanced error handling
-export const apiRequest = async (endpoint, options = {}) => {
-  const url = buildApiUrl(endpoint)
-  
-  const defaultOptions = {
-    headers: API_CONFIG.HEADERS,
-    timeout: API_CONFIG.TIMEOUT,
-    ...options
-  }
-  
-  try {
-    const response = await fetch(url, defaultOptions)
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      const error = new Error(errorData.detail || `HTTP error! status: ${response.status}`)
-      error.response = response
-      error.data = errorData
-      throw error
-    }
-    
-    return await response.json()
-  } catch (error) {
-    const enhancedError = handleApiError(error, error.response)
-    throw new Error(JSON.stringify(enhancedError))
-  }
-}
-
 // Loomi API client for new simplified workflow
 export const loomiAPI = {
   // Step 1: Detect clothing and get segmentation masks
@@ -161,13 +59,17 @@ export const loomiAPI = {
     const formData = new FormData()
     formData.append('file', imageFile)
     
-    const response = await apiRequest(API_CONFIG.ENDPOINTS.DETECT, {
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.DETECT}`, {
       method: 'POST',
       body: formData,
-      headers: {} // Let browser set Content-Type for FormData
+      headers: API_CONFIG.HEADERS
     })
     
-    return response
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
+    return await response.json()
   },
   
   // Step 2: Analyze selected clothing using cached segmentation data
@@ -179,65 +81,48 @@ export const loomiAPI = {
       selected_clothing: selectedClothing
     }
     
-    const response = await apiRequest(API_CONFIG.ENDPOINTS.ANALYZE, {
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ANALYZE}`, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {
+        ...API_CONFIG.HEADERS,
         'Content-Type': 'application/json'
       }
     })
     
-    return response
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
+    return await response.json()
   },
   
   // Health check endpoint
   async checkHealth() {
-    return await apiRequest(API_CONFIG.ENDPOINTS.HEALTH, {
-      method: 'GET'
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.HEALTH}`, {
+      method: 'GET',
+      headers: API_CONFIG.HEADERS
     })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
+    return await response.json()
   },
   
   // Performance monitoring endpoint
   async getPerformance() {
-    return await apiRequest(API_CONFIG.ENDPOINTS.PERFORMANCE, {
-      method: 'GET'
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PERFORMANCE}`, {
+      method: 'GET',
+      headers: API_CONFIG.HEADERS
     })
-  }
-}
-
-// Legacy API functions (for fallback)
-export const clothingAPI = {
-  // Traditional clothing detection
-  async traditionalDetection(file) {
-    const formData = new FormData()
-    formData.append('file', file)
     
-    return await apiRequest('/clothing', {
-      method: 'POST',
-      body: formData
-    })
-  },
-  
-  // Traditional analysis
-  async traditionalAnalysis(file, selectedClothing = null) {
-    const formData = new FormData()
-    formData.append('file', file)
-    
-    if (selectedClothing) {
-      formData.append('selected_clothing', selectedClothing)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
     
-    return await apiRequest('/analyze', {
-      method: 'POST',
-      body: formData
-    })
-  },
-  
-  // Performance monitoring
-  async getPerformanceMetrics() {
-    return await apiRequest('/performance', {
-      method: 'GET'
-    })
+    return await response.json()
   }
 }
 
@@ -311,9 +196,9 @@ export const decompressMasks = (maskBase64) => {
         if (altNonZeroCount > 0) {
           return altMaskArray
         }
-              } catch {
-          // Alternative decompression failed, continue with original
-        }
+      } catch {
+        // Alternative decompression failed, continue with original
+      }
     }
     
     return maskArray
@@ -421,8 +306,6 @@ export const applySelectedClothingMask = (ctx, mask, width, height) => {
     return
   }
   
-  // Note: Test pattern creation moved to fallback section below
-  
   // Create temporary canvas for mask processing
   const tempCanvas = document.createElement('canvas')
   const tempCtx = tempCanvas.getContext('2d')
@@ -503,8 +386,6 @@ export const applySelectedClothingMask = (ctx, mask, width, height) => {
     if (maskValue > maxValue) maxValue = maskValue
   }
   
-
-  
   // Convert to RGBA in a single pass with proper indexing
   // Use the same threshold variable defined above
   for (let i = 0; i < maskLength; i++) {
@@ -520,8 +401,6 @@ export const applySelectedClothingMask = (ctx, mask, width, height) => {
       data[pixelIndex + 3] = 0   // Transparent
     }
   }
-  
-
   
   // Put mask data to temp canvas
   tempCtx.putImageData(imageData, 0, 0)
@@ -609,151 +488,4 @@ export const applySelectedClothingMask = (ctx, mask, width, height) => {
   
   // Restore context
   ctx.restore()
-}
-
-// Helper function to convert hex color to RGB (kept for future use)
-// const hexToRgb = (hex) => {
-//   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-//   return result ? {
-//     r: parseInt(result[1], 16),
-//     g: parseInt(result[2], 16),
-//     b: parseInt(result[3], 16)
-//   } : { r: 34, g: 197, b: 94 } // Default to primary green
-// }
-
-// Custom React hook for Loomi API integration
-export const useLoomiAPI = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [detectionResult, setDetectionResult] = useState(null)
-  const [analysisResult, setAnalysisResult] = useState(null)
-  const [segmentationData, setSegmentationData] = useState(null)
-  const [highlightedImage, setHighlightedImage] = useState(null)
-
-  const detectClothing = useCallback(async (imageFile, originalImageData) => {
-    setIsLoading(true)
-    setError(null)
-    setDetectionResult(null)
-    setSegmentationData(null)
-    setHighlightedImage(null)
-    
-    try {
-      const result = await loomiAPI.detectClothing(imageFile)
-      setDetectionResult(result)
-      
-      if (result.segmentation_data) {
-        setSegmentationData(result.segmentation_data)
-        
-        // Create highlighted image with all detected items
-        // Note: originalImageData should be the uploaded file URL
-        if (result.segmentation_data.masks && originalImageData) {
-          const highlighted = await createHighlightedImage(
-            originalImageData, 
-            result.segmentation_data.masks
-          )
-          setHighlightedImage(highlighted)
-        }
-      }
-      
-      return result
-    } catch (err) {
-      const errorMessage = err.message
-      try {
-        const errorData = JSON.parse(errorMessage)
-        setError(errorData.message || 'Detection failed')
-      } catch {
-        setError(errorMessage || 'Detection failed')
-      }
-      throw err
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  const analyzeClothing = useCallback(async (selectedClothing, originalImageData) => {
-    if (!segmentationData) {
-      throw new Error('No segmentation data available. Please detect clothing first.')
-    }
-    
-    setIsLoading(true)
-    setError(null)
-    setAnalysisResult(null)
-    
-    try {
-      const result = await loomiAPI.analyzeClothing(segmentationData, selectedClothing)
-      setAnalysisResult(result)
-      
-      // Create highlighted image with selected item
-      if (segmentationData.masks && originalImageData) {
-        const highlighted = await createHighlightedImage(
-          originalImageData, 
-          segmentationData.masks, 
-          selectedClothing
-        )
-        setHighlightedImage(highlighted)
-      }
-      
-      return result
-    } catch (err) {
-      const errorMessage = err.message
-      try {
-        const errorData = JSON.parse(errorMessage)
-        setError(errorData.message || 'Analysis failed')
-      } catch {
-        setError(errorMessage || 'Analysis failed')
-      }
-      throw err
-    } finally {
-      setIsLoading(false)
-    }
-  }, [segmentationData])
-
-  const reset = useCallback(() => {
-    setDetectionResult(null)
-    setAnalysisResult(null)
-    setSegmentationData(null)
-    setHighlightedImage(null)
-    setError(null)
-  }, [])
-
-  const checkHealth = useCallback(async () => {
-    try {
-      return await loomiAPI.checkHealth()
-    } catch (err) {
-      console.error('Health check failed:', err)
-      throw err
-    }
-  }, [])
-
-  const getPerformance = useCallback(async () => {
-    try {
-      return await loomiAPI.getPerformance()
-    } catch (err) {
-      console.error('Performance check failed:', err)
-      throw err
-    }
-  }, [])
-
-  return {
-    // State
-    isLoading,
-    error,
-    detectionResult,
-    analysisResult,
-    segmentationData,
-    highlightedImage,
-    
-    // Actions
-    detectClothing,
-    analyzeClothing,
-    reset,
-    checkHealth,
-    getPerformance,
-    
-    // Computed values
-    hasDetectionData: !!detectionResult,
-    hasAnalysisData: !!analysisResult,
-    detectedClothingTypes: detectionResult?.clothing_instances || [],
-    clothingCount: detectionResult?.clothing_instances?.length || 0
-  }
 }
