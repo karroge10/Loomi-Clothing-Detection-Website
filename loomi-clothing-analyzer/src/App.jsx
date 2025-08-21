@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import './App.css'
+import { Analytics } from '@vercel/analytics/react'
 import Header from './components/Header'
 // import Hero from './components/Hero'
 import UploadSection from './components/UploadSection'
@@ -391,6 +392,7 @@ function App() {
           onClose={handleCloseModal}
         />
       )}
+      <Analytics />
     </div>
   )
 }
