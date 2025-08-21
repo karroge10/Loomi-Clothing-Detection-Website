@@ -43,6 +43,13 @@ const Header = ({ onScrollToSection, apiStatus }) => {
             <span className="status-text">LIVE</span>
           </div>
         )
+      case 'in_use':
+        return (
+          <div className="status-indicator in-use" title="Model In Use">
+            <div className="status-dot"></div>
+            <span className="status-text">IN USE</span>
+          </div>
+        )
       case 'offline':
         return (
           <div className="status-indicator offline" title="API Offline">
@@ -97,7 +104,12 @@ const Header = ({ onScrollToSection, apiStatus }) => {
         {/* Right side - Status and CTA */}
         <div className="header-right">
           {getStatusIndicator()}
-          <button className="cta-button primary">Join Waitlist</button>
+          <button 
+            className="cta-button primary" 
+            onClick={() => window.open('https://loomicloset.com', '_blank')}
+          >
+            Join Waitlist
+          </button>
         </div>
 
         {/* Mobile hamburger menu */}

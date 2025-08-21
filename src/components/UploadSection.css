@@ -49,10 +49,22 @@
   transform: translateY(-2px);
 }
 
+.upload-area.status-in-use:hover {
+  border-color: rgba(245, 158, 11, 0.6);
+  background: rgba(245, 158, 11, 0.05);
+  transform: translateY(-1px);
+}
+
 .upload-area.drag-active:not(.disabled) {
   border-color: #22c55e;
   background: rgba(34, 197, 94, 0.1);
   transform: scale(1.02);
+}
+
+.upload-area.status-in-use.drag-active {
+  border-color: rgba(245, 158, 11, 0.6);
+  background: rgba(245, 158, 11, 0.1);
+  transform: scale(1.01);
 }
 
 .upload-area.disabled {
@@ -67,6 +79,18 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
+/* Special handling for in-use state - allow interaction but show warning */
+.upload-area.status-in-use.disabled {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.upload-area.status-in-use.disabled:hover {
+  transform: translateY(-1px);
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.04);
+}
+
 /* Status-based styling */
 .upload-area.status-offline {
   border-color: rgba(239, 68, 68, 0.3);
@@ -78,14 +102,14 @@
   background: rgba(239, 68, 68, 0.03);
 }
 
-.upload-area.status-checking {
-  border-color: rgba(245, 158, 11, 0.3);
-  background: rgba(245, 158, 11, 0.02);
-}
-
-.upload-area.status-checking:hover {
+.upload-area.status-in-use {
   border-color: rgba(245, 158, 11, 0.4);
   background: rgba(245, 158, 11, 0.03);
+}
+
+.upload-area.status-in-use:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.04);
 }
 
 .upload-area.status-live {
@@ -115,18 +139,8 @@
   color: #ef4444;
 }
 
-.status-icon.checking {
-  width: 32px;
-  height: 32px;
-  border: 3px solid #f59e0b;
-  border-top: 3px solid transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.status-icon.in-use {
+  color: #f59e0b;
 }
 
 .upload-content h3 {
@@ -157,14 +171,10 @@
   font-weight: 500;
 }
 
-.offline-icon {
-  font-size: 1rem;
-}
-
-.checking-message {
+.in-use-message {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   background: rgba(245, 158, 11, 0.1);
   color: #f59e0b;
   padding: 0.75rem 1rem;
@@ -174,13 +184,19 @@
   font-weight: 500;
 }
 
-.checking-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #f59e0b;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.offline-icon {
+  font-size: 1rem;
+}
+
+.in-use-icon {
+  font-size: 1rem;
+}
+
+.upload-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
 }
 
 .selected-file {
@@ -268,7 +284,7 @@
   }
   
   .offline-message,
-  .checking-message {
+  .in-use-message {
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
     text-align: center;

@@ -135,12 +135,14 @@ const Results = ({
             <Camera size={20} />
             Original Image
           </h3>
-          {originalImage && (
-            <img 
-              src={originalImage} 
-              alt="Original uploaded image" 
-            />
-          )}
+          <div className="results-image-container">
+            {originalImage && (
+              <img 
+                src={originalImage} 
+                alt="Original uploaded image" 
+              />
+            )}
+          </div>
         </div>
 
         <div className="image-section">
@@ -148,17 +150,19 @@ const Results = ({
             <Target size={20} />
             Background Removed
           </h3>
-          {isCropping ? (
-            <div className="cropping-indicator">
-              <div className="spinner"></div>
-              <p>Cropping image...</p>
-            </div>
-          ) : croppedImage ? (
-            <img 
-              src={croppedImage} 
-              alt="Clothing with background removed and cropped" 
-            />
-          ) : null}
+          <div className="results-image-container">
+            {isCropping ? (
+              <div className="cropping-indicator">
+                <div className="spinner"></div>
+                <p>Cropping image...</p>
+              </div>
+            ) : croppedImage ? (
+              <img 
+                src={croppedImage} 
+                alt="Clothing with background removed and cropped" 
+              />
+            ) : null}
+          </div>
         </div>
       </div>
 

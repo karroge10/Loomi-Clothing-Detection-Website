@@ -97,3 +97,5 @@ temp/
 
 # Style guides and documentation
 LOOMI_STYLE_GUIDE.md
+
+.vercel

@@ -28,6 +28,7 @@ const UploadSection = ({ onFileUpload, error, apiStatus }) => {
   }
 
   const handleFile = (file) => {
+    // Block uploads when model is busy to prevent flooding
     if (apiStatus !== 'live') {
       return
     }
@@ -37,9 +38,11 @@ const UploadSection = ({ onFileUpload, error, apiStatus }) => {
   }
 
   const onButtonClick = () => {
-    if (apiStatus === 'live') {
-      fileInputRef.current?.click()
+    // Block clicks when model is busy to prevent flooding
+    if (apiStatus !== 'live') {
+      return
     }
+    fileInputRef.current?.click()
   }
 
   const handleFileInput = (e) => {
@@ -52,35 +55,36 @@ const UploadSection = ({ onFileUpload, error, apiStatus }) => {
     if (apiStatus === 'offline') {
       return 'API is currently offline. Please try again later.'
     }
-    if (apiStatus === 'checking') {
-      return 'Checking API status...'
+    if (apiStatus === 'in_use') {
+      return 'Model is currently processing another request. Please wait until it\'s available.'
     }
     if (apiStatus === 'live') {
       return 'Drag and drop your image here, or click to browse'
     }
-    return 'Checking API status...'
+    return 'Ready to process your image'
   }
 
   const getStatusIcon = () => {
     if (apiStatus === 'offline') {
       return <AlertTriangle size={24} className="status-icon offline" />
     }
-    if (apiStatus === 'checking') {
-      return <div className="status-icon checking" />
+    if (apiStatus === 'in_use') {
+      return <AlertTriangle size={24} className="status-icon in-use" />
     }
     if (apiStatus === 'live') {
       return <Camera size={32} />
     }
-    return <div className="status-icon checking" />
+    return <Camera size={32} />
   }
 
   const getStatusColor = () => {
     if (apiStatus === 'offline') return 'offline'
-    if (apiStatus === 'checking') return 'checking'
+    if (apiStatus === 'in_use') return 'in-use'
     if (apiStatus === 'live') return 'live'
-    return 'checking'
+    return 'live'
   }
 
+  // Block uploads when model is busy to prevent flooding
   const isUploadDisabled = apiStatus !== 'live'
 
   return (
@@ -115,10 +119,12 @@ const UploadSection = ({ onFileUpload, error, apiStatus }) => {
               </div>
             )}
             
-            {apiStatus === 'checking' && (
-              <div className="checking-message">
-                <div className="checking-spinner"></div>
-                <span>Verifying service availability...</span>
+            {apiStatus === 'in_use' && (
+              <div className="in-use-message">
+                <span className="in-use-icon">
+                  <AlertTriangle size={20} />
+                </span>
+                <span>Model is processing another request. Your upload will be queued.</span>
               </div>
             )}
             
